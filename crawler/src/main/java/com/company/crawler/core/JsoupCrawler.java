@@ -7,14 +7,17 @@ package com.company.crawler.core;
 
 import com.company.crawler.model.CrawlerUrl;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsoup.Connection;
 
 import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 /**
  *
  * @author silay
@@ -23,34 +26,29 @@ public class JsoupCrawler implements Crawler {
 
     @Override
     public List<CrawlerUrl> crawl(CrawlerUrl url) {
+        List<CrawlerUrl> urlsToCrawl = new ArrayList<CrawlerUrl>();
         try {
 
-            Connection connection = Jsoup.connect(url)
-            Document doc = connection.get();
-            Elements linksOnPage = doc.select("a[href]");
-            Elements importsOnPage = doc.select("link[href]");
+            Connection connection = Jsoup.connect(url.getUrl()); // connect url with jsoup
 
-            
-            
-//            if (connection.response().statusCode() == 200) // 200 is the HTTP OK status code
-//            // indicating that everything is great.
-//            {
-//                System.out.println("\n**Visiting** Received web page at " + url);
-//            }
-//            if (!connection.response().contentType().contains("text/html")) {
-//                System.out.println("**Failure** Retrieved something other than HTML");
-//                return null;
-//            }
-//            Elements linksOnPage = htmlDocument.select("a[href]");
-//            System.out.println("Found (" + linksOnPage.size() + ") links");
+            Document doc = connection.get();   //download document from connection
+            Elements linksOnPage = doc.select("a[href]"); //get links in document 
+
+            int urlCount = linksOnPage.size();
+            url.setUrlCount(urlCount); // set count of links in the page with given url
+
+            /*add each url to the list*/
             for (Element link : linksOnPage) {
-//                this.links.add(link.absUrl("href"));
+
+                CrawlerUrl urlToCrawl = new CrawlerUrl();
+                urlToCrawl.setUrl(link.absUrl("href"));
+                urlsToCrawl.add(urlToCrawl);
             }
-            return null;
-        } catch (IOException ioe) {
-            // We were not successful in our HTTP request
-            return null;
+        } catch (IOException ex) {
+            Logger.getLogger(JsoupCrawler.class.getName()).log(Level.SEVERE, null, ex);
         }
-//    }
+
+        return urlsToCrawl;
+    }
 
 }
