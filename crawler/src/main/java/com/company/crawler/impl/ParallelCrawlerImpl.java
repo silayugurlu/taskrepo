@@ -24,12 +24,12 @@ public class ParallelCrawlerImpl implements ParallelCrawler {
     public List<CrawlerUrl> crawl(String url, int depth) {
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 
-        boolean startPoint = true;
+        boolean newlyStarted = true;
         Crawler crawler = new JsoupCrawler();
-        crawler.crawl(new CrawlerUrl(url,0,""));
+//        List<CrawlerUrl> urls = crawler.crawl(new CrawlerUrl(url,0,""));
 
-        while (executor.getTaskCount() > 0 || startPoint) {
-            startPoint = false;
+        while (urls.size()>0 || executor.getTaskCount()>0 ) {
+          
             if (Hazelcast.urlstocrow.size() > 10) {
                 // daha once ziyaret edilenler kontrol edilmeli
 

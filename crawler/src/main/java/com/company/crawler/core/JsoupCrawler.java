@@ -5,6 +5,7 @@
  */
 package com.company.crawler.core;
 
+import com.company.crawler.hazelcast.CrawlerMediator;
 import com.company.crawler.model.CrawlerUrl;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ import org.jsoup.select.Elements;
  */
 public class JsoupCrawler implements Crawler {
 
+
+
     @Override
-    public List<CrawlerUrl> crawl(CrawlerUrl url) {
+    public List<CrawlerUrl> crawl(CrawlerUrl url, CrawlerMediator mediator) {
         List<CrawlerUrl> urlsToCrawl = new ArrayList<CrawlerUrl>();
         try {
 
@@ -42,7 +45,9 @@ public class JsoupCrawler implements Crawler {
 
                 CrawlerUrl urlToCrawl = new CrawlerUrl();
                 urlToCrawl.setUrl(link.absUrl("href"));
-                urlsToCrawl.add(urlToCrawl);
+                
+                mediator.addLink(urlToCrawl);
+//                urlsToCrawl.add(urlToCrawl);
             }
         } catch (IOException ex) {
             Logger.getLogger(JsoupCrawler.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,6 +5,7 @@
  */
 package com.company.crawler.core;
 
+import com.company.crawler.hazelcast.CrawlerMediator;
 import com.company.crawler.model.CrawlerUrl;
 import java.util.List;
 
@@ -20,5 +21,5 @@ public interface Crawler {
     * @param url
     * @return list of urls
     */
-   List<CrawlerUrl> crawl(CrawlerUrl url);
+   List<CrawlerUrl> crawl(CrawlerUrl url,CrawlerMediator mediator);
 }

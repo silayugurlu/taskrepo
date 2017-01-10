@@ -30,7 +30,7 @@ public class CrawlerThread implements Runnable{
     @Override
     public void run() {
         for(CrawlerUrl url : urlsToCrawl){
-            crawler.crawl(url);
+            crawler.crawl(url,);
         }
     }
     
