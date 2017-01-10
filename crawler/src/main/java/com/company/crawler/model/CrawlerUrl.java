@@ -5,11 +5,13 @@
  */
 package com.company.crawler.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author silay
  */
-public class CrawlerUrl {
+public class CrawlerUrl implements Serializable {
 
     private String url;
 
@@ -33,7 +35,7 @@ public class CrawlerUrl {
     }
 
     public void setUrl(String urlStr) {
-        this.url = url;
+        this.url = urlStr;
     }
 
     public int getDepth() {
@@ -41,7 +43,7 @@ public class CrawlerUrl {
     }
 
     public void setDepth(int depthOfUrl) {
-        this.depth = depth;
+        this.depth = depthOfUrl;
     }
 
     public int getUrlCount() {
@@ -49,7 +51,7 @@ public class CrawlerUrl {
     }
 
     public void setUrlCount(int urlTotalCount) {
-        this.urlCount = urlCount;
+        this.urlCount = urlTotalCount;
     }
 
     public String getInstanceName() {
@@ -57,7 +59,28 @@ public class CrawlerUrl {
     }
 
     public void setInstanceName(String crawlerInstanceName) {
-        this.instanceName = instanceName;
+        this.instanceName = crawlerInstanceName;
     }
 
+    public int hashCode() {
+        return url.hashCode();
+    }
+
+    public boolean equals(Object obj) {
+
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof CrawlerUrl)) {
+            return false;
+        }
+
+        CrawlerUrl crawlerUrl = (CrawlerUrl) obj;
+        return crawlerUrl.getUrl().equals(url);
+
+    }
+    
+    public String toString(){
+        return "URL: "+url+" - instance name: "+instanceName+" - depth: "+depth;
+    }
 }

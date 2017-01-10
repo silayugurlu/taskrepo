@@ -7,6 +7,7 @@ package com.company.crawler;
 
 import com.company.crawler.model.CrawlerUrl;
 import java.util.List;
+import java.util.Queue;
 
 /**
  *
@@ -15,6 +16,6 @@ import java.util.List;
 public interface ParallelCrawler {
     
     
-     List<CrawlerUrl> crawl(String url, int depth);
+     Queue<CrawlerUrl> crawl(String url, int depth);
     
 }

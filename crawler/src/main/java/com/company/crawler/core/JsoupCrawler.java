@@ -25,29 +25,36 @@ import org.jsoup.select.Elements;
  */
 public class JsoupCrawler implements Crawler {
 
-
+    public Document getDocumentHelper(String globalScheduleURL) throws IOException {
+        return Jsoup.connect(globalScheduleURL).get();
+    }
 
     @Override
-    public List<CrawlerUrl> crawl(CrawlerUrl url, CrawlerMediator mediator) {
+    public List<CrawlerUrl> crawl(CrawlerUrl url, String instanceName, CrawlerMediator mediator) {
         List<CrawlerUrl> urlsToCrawl = new ArrayList<CrawlerUrl>();
         try {
 
-            Connection connection = Jsoup.connect(url.getUrl()); // connect url with jsoup
+//            Connection connection = Jsoup.connect(url.getUrl()); // connect url with jsoup
 
-            Document doc = connection.get();   //download document from connection
+            Document doc = getDocumentHelper(url.getUrl());   //download document from connection
             Elements linksOnPage = doc.select("a[href]"); //get links in document 
 
             int urlCount = linksOnPage.size();
             url.setUrlCount(urlCount); // set count of links in the page with given url
-
+            int depth = url.getDepth() + 1;
             /*add each url to the list*/
+
             for (Element link : linksOnPage) {
 
-                CrawlerUrl urlToCrawl = new CrawlerUrl();
-                urlToCrawl.setUrl(link.absUrl("href"));
-                
-                mediator.addLink(urlToCrawl);
-//                urlsToCrawl.add(urlToCrawl);
+                String hrefStr = link.absUrl("href");
+                if (!hrefStr.isEmpty()) {
+                    CrawlerUrl urlToCrawl = new CrawlerUrl();
+                    urlToCrawl.setUrl(hrefStr);
+                    urlToCrawl.setDepth(depth);
+                    urlToCrawl.setInstanceName(instanceName);
+                    urlsToCrawl.add(urlToCrawl);
+//                    System.out.println(urlToCrawl.toString());
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(JsoupCrawler.class.getName()).log(Level.SEVERE, null, ex);

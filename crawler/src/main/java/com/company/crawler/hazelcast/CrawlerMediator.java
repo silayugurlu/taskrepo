@@ -7,6 +7,9 @@ package com.company.crawler.hazelcast;
 
 import com.company.crawler.model.CrawlerUrl;
 import com.company.crawler.task.CrawlerThread;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IQueue;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -16,22 +19,35 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author silay
  */
 public class CrawlerMediator {
-    
-     ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
+
+    ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
     Hazelcast hc;
-    public void addLink(CrawlerUrl url){
-        if(!hc contains){
-            add hc // synchronized method
-        }
+    int maximumDepth;
+
+    public void addQueue(CrawlerUrl url) {
+
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        IQueue<CrawlerUrl> urlsToCrawl = hz.getQueue("urlsToCrawl");
+        IQueue<CrawlerUrl> crawledUrls = hz.getQueue("crawledUrls");
+
         
-        if(hc.size > 10){
-            createTask(hc get 10 synchmethod);
+//        crawledUrls.
+        if (!crawledUrls.contains(url) && url.getDepth() < maximumDepth) {
+            urlsToCrawl.add(url);
         }
+
     }
-    
-    
-    public void createTask(List<CrawlerUrl> urlsToCrawl){
-         Runnable worker = new CrawlerThread(urlsToCrawl);
-                executor.execute(worker);
+
+    public void consumer() {
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        IQueue<CrawlerUrl> urlsToCrawl = hz.getQueue("urlsToCrawl");
+        IQueue<CrawlerUrl> crawledUrls = hz.getQueue("crawledUrls");
+        
+//        if(urlsToCrawl>10){
+//            
+//        }
+//        
+//        Runnable worker = new CrawlerThread(urlsToCrawl);
+//        executor.execute(worker);
     }
 }

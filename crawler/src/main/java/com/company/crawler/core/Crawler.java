@@ -21,5 +21,5 @@ public interface Crawler {
     * @param url
     * @return list of urls
     */
-   List<CrawlerUrl> crawl(CrawlerUrl url,CrawlerMediator mediator);
+   List<CrawlerUrl> crawl(CrawlerUrl url, String instanceName, CrawlerMediator mediator);
 }

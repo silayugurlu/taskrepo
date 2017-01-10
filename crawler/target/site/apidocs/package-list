@@ -1,0 +1,7 @@
+com.company.crawler
+com.company.crawler.core
+com.company.crawler.hazelcast
+com.company.crawler.impl
+com.company.crawler.listener
+com.company.crawler.model
+com.company.crawler.task
